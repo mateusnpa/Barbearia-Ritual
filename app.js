@@ -30,3 +30,10 @@ if (gallery) {
   document.querySelectorAll('.gallery-controls button').forEach((button, index) => button.addEventListener('click', () => { current = (current + (index ? 1 : slides.length - 1)) % slides.length; update(); }));
   update();
 }
+
+const menu = document.querySelector('header nav');
+const existingGallery = document.querySelector('.gallery');
+if (menu && existingGallery) {
+  menu.insertAdjacentHTML('beforeend', '<a href="#fotos">Galeria</a>');
+  existingGallery.insertAdjacentHTML('afterend', '<section class="photo-gallery" id="fotos"><small>GALERIA RITUAL</small><h2>Detalhes que fazem parte da experiência.</h2><div class="photo-grid"><img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=700&q=80" alt="Ambiente de barbearia"><img src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&fit=crop&w=700&q=80" alt="Corte masculino"><img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=700&q=80" alt="Barba e cuidados"><img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=700&q=80" alt="Produto de barbearia"><img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=700&q=80" alt="Profissional em barbearia"><img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=700&q=80" alt="Estilo masculino"></div></section>');
+}
