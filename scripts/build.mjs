@@ -19,9 +19,11 @@ const html = await readFile(new URL('index.html', root), 'utf8');
 const css = await readFile(new URL('style.css', root), 'utf8');
 const javascript = await readFile(new URL('app.js', root), 'utf8');
 const logo = (await readFile(new URL('assets/ritual-logo-transparent.png', root))).toString('base64');
+const monogram = (await readFile(new URL('assets/ritual-monogram-r.png', root))).toString('base64');
 const page = html
   .replace(/<link rel="stylesheet" href="style\.css">/, '')
   .replaceAll('assets/ritual-logo-transparent.png', `data:image/png;base64,${logo}`)
+  .replaceAll('assets/ritual-monogram-r.png', `data:image/png;base64,${monogram}`)
   .replace('</head>', `<style>${css}</style></head>`)
   .replace('</body>', `<script>${javascript}</script></body>`)
   .replace(/<script src="app\.js" defer><\/script>/, '');
