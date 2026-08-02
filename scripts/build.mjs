@@ -11,6 +11,8 @@ for (const file of ['index.html', 'app.js', 'style.css']) {
   await cp(new URL(file, root), new URL(file, dist));
 }
 
+await cp(new URL('assets/', root), new URL('assets/', dist), { recursive: true });
+
 await cp(new URL('.openai/hosting.json', root), new URL('.openai/hosting.json', dist));
 
 const html = await readFile(new URL('index.html', root), 'utf8');
