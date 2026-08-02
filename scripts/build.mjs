@@ -15,7 +15,11 @@ await cp(new URL('.openai/hosting.json', root), new URL('.openai/hosting.json', 
 
 await writeFile(new URL('server/index.js', dist), `export default {
   async fetch(request, env) {
-    if (env.ASSETS) return env.ASSETS.fetch(request);
+    if (env.ASSETS) {
+      const assetUrl = new URL(request.url);
+      if (assetUrl.pathname === '/') assetUrl.pathname = '/index.html';
+      return env.ASSETS.fetch(new Request(assetUrl, request));
+    }
     return new Response('Barberia Ritual', { status: 200 });
   },
 };
