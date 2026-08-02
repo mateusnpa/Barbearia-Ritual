@@ -13,14 +13,28 @@ for (const file of ['index.html', 'app.js', 'style.css']) {
 
 await cp(new URL('.openai/hosting.json', root), new URL('.openai/hosting.json', dist));
 
-await writeFile(new URL('server/index.js', dist), `export default {
+const html = await readFile(new URL('index.html', root), 'utf8');
+const css = await readFile(new URL('style.css', root), 'utf8');
+const javascript = await readFile(new URL('app.js', root), 'utf8');
+const page = html
+  .replace('</head>', `<style>${css}</style></head>`)
+  .replace('</body>', `<script>${javascript}</script></body>`)
+  .replace(/<script src="app\.js" defer><\/script>/, '');
+
+await writeFile(new URL('server/index.js', dist), `const page = ${JSON.stringify(page)};
+
+export default {
   async fetch(request, env) {
-    if (env.ASSETS) {
-      const assetUrl = new URL(request.url);
-      if (assetUrl.pathname === '/') assetUrl.pathname = '/index.html';
-      return env.ASSETS.fetch(new Request(assetUrl, request));
+    const url = new URL(request.url);
+    if (url.pathname === '/' || url.pathname === '/index.html') {
+      return new Response(page, {
+        headers: { 'content-type': 'text/html; charset=UTF-8' },
+      });
     }
-    return new Response('Barberia Ritual', { status: 200 });
+    if (env.ASSETS) {
+      return env.ASSETS.fetch(request);
+    }
+    return new Response('PÃ¡gina nÃ£o encontrada', { status: 404 });
   },
 };
 `);
